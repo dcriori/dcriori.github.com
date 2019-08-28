@@ -303,35 +303,101 @@
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get cs</span><br><span class="line">NAME                 STATUS    MESSAGE             ERROR</span><br><span class="line">controller-manager   Healthy   ok</span><br><span class="line">scheduler            Healthy   ok</span><br><span class="line">etcd-0               Healthy   &#123;&quot;health&quot;:&quot;true&quot;&#125;</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>5.8 查看机器状态</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line">NAME             STATUS   ROLES    AGE     VERSION</span><br><span class="line">k8s-master-221   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-master-222   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-master-223   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-node-226     Ready    &lt;none&gt;   16d     v1.15.2</span><br><span class="line">k8s-node-227     Ready    &lt;none&gt;   20h     v1.15.2</span><br><span class="line">k8s-node-228     Ready    &lt;none&gt;   16d     v1.15.2</span><br><span class="line">k8s-node-229     Ready    &lt;none&gt;   2d22h   v1.15.2</span><br></pre></td></tr></table></figure>
-
-<p><strong>如果看到以上信息，说明集群正常。</strong></p>
 <h2 id="6-安装flanne"><a href="#6-安装flanne" class="headerlink" title="## 6.安装flanne"></a>## 6.安装flanne</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
 
 <h2 id="7-配置API-Server"><a href="#7-配置API-Server" class="headerlink" title="## 7.配置API Server"></a>## 7.配置API Server</h2><blockquote>
-<p>安装kubectl</p>
+<p>7.1安装kubectl</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install kubectl -y</span><br><span class="line">systemctl enable kubectl</span><br><span class="line">systemctl start kubectl</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>配置kubectl：将master上的/root/.kube/config文件copy至API Server的/root/.kube下</p>
+<p>7.2配置kubectl：将master上的/root/.kube/config文件copy至API Server的/root/.kube下</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp root@192.168.1.221:/root/.kube/config /root/.kube</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>重启kubectl服务</p>
+<p>7.3重启kubectl服务</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart kubectl</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>测试是否正常</p>
+<p>7.4查看集群状态</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line">NAME             STATUS   ROLES    AGE     VERSION</span><br><span class="line">k8s-master-221   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-master-222   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-master-223   Ready    master   16d     v1.15.2</span><br><span class="line">k8s-node-226     Ready    &lt;none&gt;   16d     v1.15.2</span><br><span class="line">k8s-node-227     Ready    &lt;none&gt;   20h     v1.15.2</span><br><span class="line">k8s-node-228     Ready    &lt;none&gt;   16d     v1.15.2</span><br><span class="line">k8s-node-229     Ready    &lt;none&gt;   2d22h   v1.15.2</span><br></pre></td></tr></table></figure>
 
-<p><strong>如果能正常查看到集群节点，则表示正常</strong></p>
+<p><strong>如果能正常查看到集群节点，STATUS都为Ready，则表示正常</strong></p>
+<blockquote>
+<p>7.5查看容器是否正常启动</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods -n kube-system -o wide</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://pwvhqgbhd.bkt.clouddn.com/15669530216174.jpg" alt><br>主要包含如下组件</p>
+<ul>
+<li>coredns</li>
+<li>etcd</li>
+<li>kube-apiserver</li>
+<li>kube-controller</li>
+<li>kube-flannel</li>
+<li>kube-proxy</li>
+<li>kube-scheduler</li>
+</ul>
+<p><strong>如果容器状态都为Running,说明集群组件运行正常</strong></p>
+<h2 id="8-调试及删除节点-amp-amp-清理环境"><a href="#8-调试及删除节点-amp-amp-清理环境" class="headerlink" title="## 8.调试及删除节点&amp;&amp;清理环境"></a>## 8.调试及删除节点&amp;&amp;清理环境</h2><p>如果安装后发现集群组件运行不正常，首先可以调试，实在不能解决，建议删除节点并清理环境</p>
+<blockquote>
+<p>8.1调试</p>
+</blockquote>
+<ul>
+<li>describe</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe pod kube-flannel-ds-amd64-7r49t -n kube-system</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>logs</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs kube-flannel-ds-amd64-7r49t -n kube-system</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>exec</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it kube-flannel-ds-amd64-7r49t /bin/bash -n kube-system</span><br></pre></td></tr></table></figure>
+
+<p><strong>以上命令可替换部分<br>1.容器名：<code>kube-flannel-ds-amd64-7r49t</code><br>2.命名空间：<code>kube-system</code></strong></p>
+<blockquote>
+<p>8.2删除node节点</p>
+</blockquote>
+<ul>
+<li>清理容器资源</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl drain k8s-node-227 --delete-local-data --force --ignore-daemonsets</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除节点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete node k8s-node-227</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>8.3kubeadm清理</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kubeadm reset</span><br><span class="line">ifconfig cni0 down</span><br><span class="line">ip link delete cni0</span><br><span class="line">ifconfig flannel.1 down</span><br><span class="line">ip link delete flannel.1</span><br><span class="line">rm -rf /var/lib/cni/</span><br></pre></td></tr></table></figure>
+
+<p>清理后，可以重新执行上面的<code>kubeadm join</code>加入集群</p>
+<h2 id="9-测试集群部署及网络"><a href="#9-测试集群部署及网络" class="headerlink" title="## 9.测试集群部署及网络"></a>## 9.测试集群部署及网络</h2><blockquote>
+<p>9.1部署nignx测试环境</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.8</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-service</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - port: 8000</span><br><span class="line">    targetPort: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">  selector:</span><br><span class="line">    app: nginx</span><br></pre></td></tr></table></figure>
+
+<p>运行情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NAME                                     READY   STATUS    RESTARTS   AGE   LABELS</span><br><span class="line">nginx-deployment-6f655f5d99-6p2rz        1/1     Running   0          11m   app=nginx,pod-template-hash=6f655f5d99</span><br><span class="line">nginx-deployment-6f655f5d99-xnhxg        1/1     Running   0          11m   app=nginx,pod-template-hash=6f655f5d99</span><br></pre></td></tr></table></figure>
+
+<p><strong>接下来测试网络</strong></p>
+<blockquote>
+<p>9.2查看Pod IP</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod --selector=&quot;app=nginx&quot; -o jsonpath=&apos;&#123; .items[*].status.podIP &#125;&apos;</span><br><span class="line"># 由于replicas=2，则控制台打印2个Pod IP</span><br><span class="line">10.244.9.5 </span><br><span class="line">10.244.6.225</span><br></pre></td></tr></table></figure>
+
+<p>在任意集群节点上（不包括Api Server）都可以通过 <a href="http://PodIP:Port" target="_blank" rel="noopener">http://PodIP:Port</a> 访问到nginx服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.244.9.5</span><br><span class="line">curl http://10.244.6.225</span><br><span class="line">都可以打印nginx的首页</span><br></pre></td></tr></table></figure>
+
 
       
 
