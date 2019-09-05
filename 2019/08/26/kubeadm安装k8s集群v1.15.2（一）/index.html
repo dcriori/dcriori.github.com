@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://pwvhqgbhd.bkt.clouddn.com/15668950118003.jpg">
 <meta property="og:image" content="http://pwvhqgbhd.bkt.clouddn.com/15668950706743.jpg">
 <meta property="og:image" content="http://pwvhqgbhd.bkt.clouddn.com/15669530216174.jpg">
-<meta property="og:updated_time" content="2019-08-28T01:32:54.241Z">
+<meta property="og:updated_time" content="2019-09-05T09:01:25.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kubeadm安装k8s集群v1.15.2（高可用）（一）">
 <meta name="twitter:description" content="## 1.机器准备 1.1环境信息  centos7.5 1804kubernetes v1.15.2docker v18.09.7  1.2修改机器名及网络配置  1234#  修改机器名hostnamectl set-hostname k8s-master-xxx#  修改网络名vi /etc/sysconfig/network-scripts/ifcfg-eth0   1.3设置宿主机ho">
@@ -309,6 +309,11 @@
 <p>5.7 查看一下集群状态，确认个组件都处于healthy状态：</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get cs</span><br><span class="line">NAME                 STATUS    MESSAGE             ERROR</span><br><span class="line">controller-manager   Healthy   ok</span><br><span class="line">scheduler            Healthy   ok</span><br><span class="line">etcd-0               Healthy   &#123;&quot;health&quot;:&quot;true&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>5.8 如果不记得token信息，可使用<code>kubeadm token generate</code>生成，有两种方法可供参考。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">方法一：</span><br><span class="line">kubeadm token generate</span><br><span class="line">——&gt; d6gobn.yj1wqzwhxo1cfehe</span><br><span class="line">kubeadm token create e7t2i9.2argts7w24t52nq1 --print-join-command --ttl=0</span><br><span class="line"></span><br><span class="line">方法二：</span><br><span class="line"># 重新创建token，创建完也可以通过kubeadm token list命令查看token列表</span><br><span class="line">$ kubeadm token create</span><br><span class="line">s058gw.c5x6eeze28****</span><br><span class="line"># 通过以下命令查看sha256格式的证书hash</span><br><span class="line">$ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | openssl dgst -sha256 -hex | sed &apos;s/^.* //&apos; </span><br><span class="line">9592464b295699696ce35e5d1dd155580ee29d9bd0884b*****</span><br></pre></td></tr></table></figure>
 
 <h2 id="6-安装flanne"><a href="#6-安装flanne" class="headerlink" title="## 6.安装flanne"></a>## 6.安装flanne</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
 
